@@ -169,12 +169,6 @@ def wind_pressure_coordinates(line,a,length):
 
     return x, y, z
 
-    """
-    print(c[0])
-    print(c[0])
-    print(c[1])
-    print(length)"""
-    
 
 
 
@@ -186,10 +180,10 @@ for i in range(0,polygon_count):
         if str("\'" +"l"+str(j)+"\'") in str(data[i]).lower():
             
     
-            if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RAKE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RIDGE":
+            if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE":
                 
                    line = data[i]["POLYGON"]["@path"]["L"+str(j)]
-                   print("new xyz wind zone coordinates for F" + str(i) + " Type " +  str(data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] ))
+                   print("xyz wind zone coordinates for F" + str(i) + " Type " +  str(data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] ))
                    print(wind_pressure_coordinates(line,a,length(line)))
                    
     
