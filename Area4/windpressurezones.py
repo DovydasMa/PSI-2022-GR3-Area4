@@ -177,6 +177,22 @@ def wind_pressure_coordinates(line,a,length):
     
 
 
-print("new coordinates of the given line: " + str(wind_pressure_coordinates(eave_line(1),a,length(eave_line(1)))))
+
+
+for i in range(0,polygon_count):
+    
+    for j in range(1,line_count+1):   
+    
+        if str("\'" +"l"+str(j)+"\'") in str(data[i]).lower():
+            
+    
+            if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RAKE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RIDGE":
+                
+                   line = data[i]["POLYGON"]["@path"]["L"+str(j)]
+                   print("new xyz wind zone coordinates for F" + str(i) + " Type " +  str(data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] ))
+                   print(wind_pressure_coordinates(line,a,length(line)))
+                   
+    
+
 
 
