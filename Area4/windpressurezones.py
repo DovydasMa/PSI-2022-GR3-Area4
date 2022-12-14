@@ -254,6 +254,9 @@ co = 0
 i = 0
     
 p = 0
+re1="999"
+re2="999"
+
 
 for j in range(1,line_count+1):
     
@@ -276,60 +279,103 @@ for j in range(1,line_count+1):
                     y[count] = line["C"+str(k)]["Y"]
                     z[count] = line["C"+str(k)]["Z"]
                     count = count + 1
-                    
+
+
+
             for k in range(0,2):
-                
-                sx1 = cx[i][0]
-                sy1 = cy[i][0]
-                sz1 = cz[i][0]
 
-                sx2 = cx[i][0]
-                sy2 = cy[i][0]
-                sz2 = cz[i][0]
-                for b in range(0,9):
-                    sb1=length_between2_points(sx1,sy1,sz1,x[k],y[k],z[k])
+                id = str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
 
-                    sb2=length_between2_points(sx2,sy2,sz2,x[k],y[k],z[k])
 
-                    sk=length_between2_points(cx[i][b],cy[i][b],cz[i][b],x[k],y[k],z[k])
-
-                    if sb1 > sk:
-                        sx1=cx[i][b]
-                        sy1=cy[i][b]
-                        sz1=cz[i][b]
-
-                    elif sb1 > sk:
-                        sx2=cx[i][b]
-                        sy2=cy[i][b]
-                        sz2=cz[i][b]
-
-                vx1,vy1,vz1 = get_the_vector(sx1,sy1,sz1,x[k],y[k],z[k])
-                vx2,vy2,vz2 = get_the_vector(sx2,sy2,sz2,x[k],y[k],z[k])
-                avx,avy,avz = add_the_vectors(vx1,vy1,vz1,vx2,vy2,vz2)
-                """l = math.sqrt(pow(sb1,2)+pow(sb2),2)  (l / length)"""
+                if (re1 != id) and (re2 != id):
 
                 
-                if(co % 2) == 0:
+                    sx1 = 999
+                    sy1 = 999
+                    sz1 = 999
+
+                    sx2 = 999
+                    sy2 = 999
+                    sz2 = 999
+                    for b in range(0,8):
+                        sb1=length_between2_points(sx1,sy1,sz1,x[k],y[k],z[k])
+
+                        sb2=length_between2_points(sx2,sy2,sz2,x[k],y[k],z[k])
+
+                        sk=length_between2_points(cx[i][b],cy[i][b],cz[i][b],x[k],y[k],z[k])
+
+
+                        
+                        if round(sb1) > round(sk):
+                            sx1=cx[i][b]
+                            sy1=cy[i][b]
+                            sz1=cz[i][b]
+
+                        elif round(sb2) > round(sk):
+                            sx2=cx[i][b]
+                            sy2=cy[i][b]
+                            sz2=cz[i][b]
+                        
+                        
+                    
+
+
+
+
+                    vx1,vy1,vz1 = get_the_vector(sx1,sy1,sz1,x[k],y[k],z[k])
+                    vx2,vy2,vz2 = get_the_vector(sx2,sy2,sz2,x[k],y[k],z[k])
+                    avx,avy,avz = add_the_vectors(vx1,vy1,vz1,vx2,vy2,vz2)
+                    """l = math.sqrt(pow(sb1,2)+pow(sb2),2)  (l / length)"""
+
+                    
+
+                    
                     cx1[i][co] = x[k] + avx
                     cy1[i][co] = y[k] + avy
                     cz1[i][co] = z[k] + avz
 
-                else:
-                    cx1[i][co] = x[k] - avx
-                    cy1[i][co] = y[k] - avy
-                    cz1[i][co] = z[k] - avz
+                    print("zone3:")
 
-                co = co + 1
+                    print("("+str(x[k])+","+str(y[k])+","+str(z[k])+")")
+                    print("("+str(sx1)+","+str(sy1)+","+str(sz1)+")")
+                    print("("+str(sx2)+","+str(sy2)+","+str(sz2)+")")
+                    print("("+str(cx1[0][i])+","+str(cy1[0][i])+","+str(cz1[0][i])+")")
+
+                    """
+                    print("("+str(x[k])+","+str(y[k])+","+str(z[k])+")")
+                    print("("+str(sx1)+","+str(sy1)+","+str(sz1)+")")
+                    print("length.")
+                    print(length_between2_points(sx1,sy1,sz1,x[k],y[k],z[k]))
                     
+                    print("("+str(sx2)+","+str(sy2)+","+str(sz2)+")")
+                    print("length.")
+                    print(length_between2_points(sx2,sy2,sz2,x[k],y[k],z[k]))
+                    print("...................")
+                    """
 
-"""
-for i in range(0,n2+1):
+                    co = co + 1
+
+
+                    if k==0:
+                        re1= str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
+                        print(re)
+
+                    else:
+                        re2= str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
+                        print(re)
+                
+"""             
+print("(             )")
+
+for i in range(0,n2):
     print("("+str(cx[0][i])+","+str(cy[0][i])+","+str(cz[0][i])+")")
-
-
-for i in range(0,n3+1):
-    print("("+str(cx1[0][i])+","+str(cy1[0][i])+","+str(cz1[0][i])+")")
+print("(             )")
 """
+print("zone1")
+for i in range(0,n3):
+    print("("+str(cx1[0][i])+","+str(cy1[0][i])+","+str(cz1[0][i])+")")
+
+
 
 
 """
@@ -351,5 +397,7 @@ for i in range(0,polygon_count):
                    
 
 """
+
+
 
 
