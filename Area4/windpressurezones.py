@@ -100,23 +100,36 @@ print("a is: " + str(a))
 
 
 
+def hip_count(i): 
 
-
-
-
-
-"""finds the eave line of the polygon"""
-
-def eave_line(i): 
+    hip = 0
     
     for j in range(1,line_count+1):   
   
         if str("\'" +"l"+str(j)+"\'") in str(data[i]).lower():
             
-            if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE":
+            if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "HIP":
+                hip = hip + 1
                     
-                   return data[i]["POLYGON"]["@path"]["L"+str(j)]
-               
+    return hip
+
+
+def hip_eave_rake_ridge_count(i): 
+
+    all = 0
+    
+    for j in range(1,line_count+1):   
+  
+        if str("\'" +"l"+str(j)+"\'") in str(data[i]).lower():
+            
+            if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "HIP" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RAKE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RIDGE":
+                all = all + 1
+                    
+    return all 
+
+
+
+
                 
 """lenght of the given line"""               
                 
@@ -210,160 +223,160 @@ def add_the_vectors(vx1,vy1,vz1,vx2,vy2,vz2):
 
 
 
+for i in range(0,polygon_count):
+
+    """works if there is no 'hip' on the roof phase"""
+
+    if hip_count(i) == 0 and hip_eave_rake_ridge_count(i) > 0:
 
 
-"""problem"""
-n2 = n_rake_eave_ridge(0) *2
 
-cx = [[0]*polygon_count]*n2
-cy = [[0]*polygon_count]*n2
-cz = [[0]*polygon_count]*n2
-    
+        n2 = n_rake_eave_ridge(i) *2
 
-
-i=0
-
-
-    
-p = 0
-
-for j in range(1,line_count+1):
-    
-    
-
-    if str("\'" +"l"+str(j)+"\'") in str(data[i]).lower():
-        
-
-        if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RAKE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RIDGE":
+        cx = [[0]*polygon_count]*n2
+        cy = [[0]*polygon_count]*n2
+        cz = [[0]*polygon_count]*n2
             
-                line = data[i]["POLYGON"]["@path"]["L"+str(j)]
-                
-                cx[i][p], cy[i][p], cz[i][p], cx[i][p+1], cy[i][p+1], cz[i][p+1] = new_coordinates_in_line(line,a,length(line))
-                
-                p = p + 2
-n3 = n_rake_eave_ridge(0)
-
-cx1 = [[0]*polygon_count]*n3
-cy1 = [[0]*polygon_count]*n3
-cz1 = [[0]*polygon_count]*n3
-co = 0
-                 
-
-"""find 2 closest points"""
-
-i = 0
-    
-p = 0
-re1="999"
-re2="999"
-
-
-for j in range(1,line_count+1):
-    
-    
-
-    if str("\'" +"l"+str(j)+"\'") in str(data[i]).lower():
-        
-
-        if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RAKE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RIDGE":
             
-            line = data[i]["POLYGON"]["@path"]["L"+str(j)]
+        p = 0
 
-            x = [0,0]
-            y = [0,0]
-            z = [0,0]
-            count = 0
-            for k in range(1,point_count+1):
-                if str("\'" +"c"+str(k)+"\'") in str(line).lower():
-                    x[count] = line["C"+str(k)]["X"]
-                    y[count] = line["C"+str(k)]["Y"]
-                    z[count] = line["C"+str(k)]["Z"]
-                    count = count + 1
+        for j in range(1,line_count+1):
+            
+            
 
-
-
-            for k in range(0,2):
-
-                id = str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
-
-
-                if (re1 != id) and (re2 != id):
-
+            if str("\'" +"l"+str(j)+"\'") in str(data[i]).lower():
                 
-                    sx1 = 999
-                    sy1 = 999
-                    sz1 = 999
 
-                    sx2 = 999
-                    sy2 = 999
-                    sz2 = 999
-                    for b in range(0,8):
-                        sb1=length_between2_points(sx1,sy1,sz1,x[k],y[k],z[k])
-
-                        sb2=length_between2_points(sx2,sy2,sz2,x[k],y[k],z[k])
-
-                        sk=length_between2_points(cx[i][b],cy[i][b],cz[i][b],x[k],y[k],z[k])
-
-
+                if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RAKE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RIDGE":
+                    
+                        line = data[i]["POLYGON"]["@path"]["L"+str(j)]
                         
-                        if round(sb1) > round(sk):
-                            sx1=cx[i][b]
-                            sy1=cy[i][b]
-                            sz1=cz[i][b]
-
-                        elif round(sb2) > round(sk):
-                            sx2=cx[i][b]
-                            sy2=cy[i][b]
-                            sz2=cz[i][b]
+                        cx[i][p], cy[i][p], cz[i][p], cx[i][p+1], cy[i][p+1], cz[i][p+1] = new_coordinates_in_line(line,a,length(line))
                         
-                        
-                    
+                        p = p + 2
+        n3 = n_rake_eave_ridge(0)
+
+        cx1 = [[0]*polygon_count]*n3
+        cy1 = [[0]*polygon_count]*n3
+        cz1 = [[0]*polygon_count]*n3
+        co = 0
+            
+        p = 0
+        re1="999"
+        re2="999"
 
 
+        for j in range(1,line_count+1):
+            
+            
 
-
-                    vx1,vy1,vz1 = get_the_vector(sx1,sy1,sz1,x[k],y[k],z[k])
-                    vx2,vy2,vz2 = get_the_vector(sx2,sy2,sz2,x[k],y[k],z[k])
-                    avx,avy,avz = add_the_vectors(vx1,vy1,vz1,vx2,vy2,vz2)
-                    """l = math.sqrt(pow(sb1,2)+pow(sb2),2)  (l / length)"""
-
-                    
-
-                    
-                    cx1[i][co] = x[k] + avx
-                    cy1[i][co] = y[k] + avy
-                    cz1[i][co] = z[k] + avz
-
-                    print("zone3:")
-
-                    print("("+str(x[k])+","+str(y[k])+","+str(z[k])+")")
-                    print("("+str(sx1)+","+str(sy1)+","+str(sz1)+")")
-                    print("("+str(sx2)+","+str(sy2)+","+str(sz2)+")")
-                    print("("+str(cx1[0][i])+","+str(cy1[0][i])+","+str(cz1[0][i])+")")
-
-                    """
-                    print("("+str(x[k])+","+str(y[k])+","+str(z[k])+")")
-                    print("("+str(sx1)+","+str(sy1)+","+str(sz1)+")")
-                    print("length.")
-                    print(length_between2_points(sx1,sy1,sz1,x[k],y[k],z[k]))
-                    
-                    print("("+str(sx2)+","+str(sy2)+","+str(sz2)+")")
-                    print("length.")
-                    print(length_between2_points(sx2,sy2,sz2,x[k],y[k],z[k]))
-                    print("...................")
-                    """
-
-                    co = co + 1
-
-
-                    if k==0:
-                        re1= str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
-                        print(re)
-
-                    else:
-                        re2= str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
-                        print(re)
+            if str("\'" +"l"+str(j)+"\'") in str(data[i]).lower():
                 
+
+                if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RAKE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RIDGE":
+                    
+                    line = data[i]["POLYGON"]["@path"]["L"+str(j)]
+
+                    x = [0,0]
+                    y = [0,0]
+                    z = [0,0]
+                    count = 0
+                    for k in range(1,point_count+1):
+                        if str("\'" +"c"+str(k)+"\'") in str(line).lower():
+                            x[count] = line["C"+str(k)]["X"]
+                            y[count] = line["C"+str(k)]["Y"]
+                            z[count] = line["C"+str(k)]["Z"]
+                            count = count + 1
+
+
+
+                    for k in range(0,2):
+
+                        id = str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
+
+
+                        if (re1 != id) and (re2 != id):
+
+                        
+                            sx1 = 999
+                            sy1 = 999
+                            sz1 = 999
+
+                            sx2 = 999
+                            sy2 = 999
+                            sz2 = 999
+                            for b in range(0,8):
+                                sb1=length_between2_points(sx1,sy1,sz1,x[k],y[k],z[k])
+
+                                sb2=length_between2_points(sx2,sy2,sz2,x[k],y[k],z[k])
+
+                                sk=length_between2_points(cx[i][b],cy[i][b],cz[i][b],x[k],y[k],z[k])
+
+
+                                
+                                if round(sb1) > round(sk):
+                                    sx1=cx[i][b]
+                                    sy1=cy[i][b]
+                                    sz1=cz[i][b]
+
+                                elif round(sb2) > round(sk):
+                                    sx2=cx[i][b]
+                                    sy2=cy[i][b]
+                                    sz2=cz[i][b]
+                                
+                                
+                            
+
+
+
+
+                            vx1,vy1,vz1 = get_the_vector(sx1,sy1,sz1,x[k],y[k],z[k])
+                            vx2,vy2,vz2 = get_the_vector(sx2,sy2,sz2,x[k],y[k],z[k])
+                            avx,avy,avz = add_the_vectors(vx1,vy1,vz1,vx2,vy2,vz2)
+                            """l = math.sqrt(pow(sb1,2)+pow(sb2),2)  (l / length)"""
+
+                            
+
+                            
+                            cx1[i][co] = x[k] + avx
+                            cy1[i][co] = y[k] + avy
+                            cz1[i][co] = z[k] + avz
+
+                            print("zone3:")
+
+                            print("("+str(x[k])+","+str(y[k])+","+str(z[k])+")")
+                            print("("+str(sx1)+","+str(sy1)+","+str(sz1)+")")
+                            print("("+str(sx2)+","+str(sy2)+","+str(sz2)+")")
+                            print("("+str(cx1[i][co])+","+str(cy1[i][co])+","+str(cz1[i][co])+")")
+
+                            """
+                            print("("+str(x[k])+","+str(y[k])+","+str(z[k])+")")
+                            print("("+str(sx1)+","+str(sy1)+","+str(sz1)+")")
+                            print("length.")
+                            print(length_between2_points(sx1,sy1,sz1,x[k],y[k],z[k]))
+                            
+                            print("("+str(sx2)+","+str(sy2)+","+str(sz2)+")")
+                            print("length.")
+                            print(length_between2_points(sx2,sy2,sz2,x[k],y[k],z[k]))
+                            print("...................")
+                            """
+
+                            co = co + 1
+
+
+                            if k==0:
+                                re1= str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
+                                print(re)
+
+                            else:
+                                re2= str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
+                                print(re)
+
+
+        print("zone1")
+        for p in range(0,n3):
+            print("("+str(cx1[0][p])+","+str(cy1[0][p])+","+str(cz1[0][p])+")")
+                    
 """             
 print("(             )")
 
@@ -371,9 +384,7 @@ for i in range(0,n2):
     print("("+str(cx[0][i])+","+str(cy[0][i])+","+str(cz[0][i])+")")
 print("(             )")
 """
-print("zone1")
-for i in range(0,n3):
-    print("("+str(cx1[0][i])+","+str(cy1[0][i])+","+str(cz1[0][i])+")")
+
 
 
 
@@ -397,7 +408,6 @@ for i in range(0,polygon_count):
                    
 
 """
-
 
 
 
