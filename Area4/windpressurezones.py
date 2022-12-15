@@ -227,11 +227,13 @@ for i in range(0,polygon_count):
 
     """works if there is no 'hip' on the roof phase"""
 
+
+
     if hip_count(i) == 0 and hip_eave_rake_ridge_count(i) > 0:
 
 
 
-        n2 = n_rake_eave_ridge(i) *2
+        n2 = hip_eave_rake_ridge_count(i) * 2
 
         cx = [[0]*polygon_count]*n2
         cy = [[0]*polygon_count]*n2
@@ -254,7 +256,7 @@ for i in range(0,polygon_count):
                         cx[i][p], cy[i][p], cz[i][p], cx[i][p+1], cy[i][p+1], cz[i][p+1] = new_coordinates_in_line(line,a,length(line))
                         
                         p = p + 2
-        n3 = n_rake_eave_ridge(0)
+        n3 = hip_eave_rake_ridge_count(i)
 
         cx1 = [[0]*polygon_count]*n3
         cy1 = [[0]*polygon_count]*n3
@@ -262,8 +264,8 @@ for i in range(0,polygon_count):
         co = 0
             
         p = 0
-        re1="999"
-        re2="999"
+        rep1="999"
+        rep2="999"
 
 
         for j in range(1,line_count+1):
@@ -295,7 +297,7 @@ for i in range(0,polygon_count):
                         id = str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
 
 
-                        if (re1 != id) and (re2 != id):
+                        if (rep1 != id) and (rep2 != id):
 
                         
                             sx1 = 999
@@ -305,7 +307,10 @@ for i in range(0,polygon_count):
                             sx2 = 999
                             sy2 = 999
                             sz2 = 999
-                            for b in range(0,8):
+
+                            pc = hip_eave_rake_ridge_count(i) * 2
+
+                            for b in range(0,pc):
                                 sb1=length_between2_points(sx1,sy1,sz1,x[k],y[k],z[k])
 
                                 sb2=length_between2_points(sx2,sy2,sz2,x[k],y[k],z[k])
@@ -365,18 +370,75 @@ for i in range(0,polygon_count):
 
 
                             if k==0:
-                                re1= str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
+                                rep1= str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
                                 print(re)
 
                             else:
-                                re2= str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
+                                rep2= str(round(x[k])) + str(round(y[k])) + str(round(z[k]))
                                 print(re)
 
 
         print("zone1")
         for p in range(0,n3):
             print("("+str(cx1[0][p])+","+str(cy1[0][p])+","+str(cz1[0][p])+")")
+
+        n1 = hip_eave_rake_ridge_count(i)
+
+        count = 0
+
+        x2 = [0]*n2
+        y2 = [0]*n2
+        z2 = [0]*n2
+
+        co = 0
+
+        for g in range(0,n1):
+            
+
+
+            print("zone2:")
+            for k in range(0,2):
+
+                                       
+                x2[count] = cx[i][co]
+                y2[count] = cy[i][co]
+                z2[count] = cz[i][co]
+                co = co + 1
+
+            
+                sx1 = 999
+                sy1 = 999
+                sz1 = 999
+                 
+
+                pc = hip_eave_rake_ridge_count(i) 
+
+                for b in range(0,pc):
+
+                    sb1=length_between2_points(sx1,sy1,sz1,x2[k],y2[k],z2[k])
+
+
+                    sk=length_between2_points(cx1[i][b],cy1[i][b],cz1[i][b],x2[k],y2[k],z2[k])
+
+
                     
+                    if round(sb1) > round(sk):
+
+                        sx1=cx1[i][b]
+                        sy1=cy1[i][b]
+                        sz1=cz1[i][b]
+
+
+
+                    
+
+                print("("+str(x2[count])+","+str(y2[count])+","+str(z2[count])+")")
+                print("("+str(sx1)+","+str(sy1)+","+str(sz1)+")")
+                count = count + 1
+
+                
+
+print("hello")                  
 """             
 print("(             )")
 
@@ -408,6 +470,5 @@ for i in range(0,polygon_count):
                    
 
 """
-
 
 
