@@ -98,6 +98,18 @@ else:
                         
 print("a is: " + str(a))
 
+def valley_count(i): 
+
+    valley = 0
+    
+    for j in range(1,line_count+1):   
+  
+        if str("\'" +"l"+str(j)+"\'") in str(data[i]).lower():
+            
+            if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "VALLEY":
+                valley = valley + 1
+                    
+    return valley
 
 
 def hip_count(i): 
@@ -114,15 +126,14 @@ def hip_count(i):
     return hip
 
 
-def hip_eave_rake_ridge_count(i): 
-
+def hip_eave_rake_ridge_valley_count(i): 
     all = 0
     
     for j in range(1,line_count+1):   
   
         if str("\'" +"l"+str(j)+"\'") in str(data[i]).lower():
             
-            if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "HIP" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RAKE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RIDGE":
+            if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "HIP" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RAKE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RIDGE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "VALLEY":
                 all = all + 1
                     
     return all 
@@ -225,15 +236,15 @@ def add_the_vectors(vx1,vy1,vz1,vx2,vy2,vz2):
 
 for i in range(0,polygon_count):
 
-    """works if there is no 'hip' on the roof phase"""
+    """finds all wind zones for quadratic roof phases"""
 
 
 
-    if hip_count(i) == 0 and hip_eave_rake_ridge_count(i) > 0:
+    if hip_count(i) == 0 and hip_eave_rake_ridge_valley_count(i) > 0 and valley_count(i) == 0 :
 
 
 
-        n2 = hip_eave_rake_ridge_count(i) * 2
+        n2 = hip_eave_rake_ridge_valley_count(i) * 2
 
         cx = [[0]*polygon_count]*n2
         cy = [[0]*polygon_count]*n2
@@ -256,7 +267,7 @@ for i in range(0,polygon_count):
                         cx[i][p], cy[i][p], cz[i][p], cx[i][p+1], cy[i][p+1], cz[i][p+1] = new_coordinates_in_line(line,a,length(line))
                         
                         p = p + 2
-        n3 = hip_eave_rake_ridge_count(i)
+        n3 = hip_eave_rake_ridge_valley_count(i)
 
         cx1 = [[0]*polygon_count]*n3
         cy1 = [[0]*polygon_count]*n3
@@ -308,7 +319,7 @@ for i in range(0,polygon_count):
                             sy2 = 999
                             sz2 = 999
 
-                            pc = hip_eave_rake_ridge_count(i) * 2
+                            pc = hip_eave_rake_ridge_valley_count(i) * 2
 
                             for b in range(0,pc):
                                 sb1=length_between2_points(sx1,sy1,sz1,x[k],y[k],z[k])
@@ -382,7 +393,7 @@ for i in range(0,polygon_count):
         for p in range(0,n3):
             print("("+str(cx1[0][p])+","+str(cy1[0][p])+","+str(cz1[0][p])+")")
 
-        n1 = hip_eave_rake_ridge_count(i)
+        n1 = hip_eave_rake_ridge_valley_count(i)
 
         count = 0
 
@@ -411,7 +422,7 @@ for i in range(0,polygon_count):
                 sz1 = 999
                  
 
-                pc = hip_eave_rake_ridge_count(i) 
+                pc = hip_eave_rake_ridge_valley_count(i) 
 
                 for b in range(0,pc):
 
@@ -438,37 +449,14 @@ for i in range(0,polygon_count):
 
                 
 
-print("hello")                  
+                 
 """             
-print("(             )")
+
 
 for i in range(0,n2):
     print("("+str(cx[0][i])+","+str(cy[0][i])+","+str(cz[0][i])+")")
-print("(             )")
-"""
-
-
-
-
 
 """
 
-for i in range(0,polygon_count):
-    
-    for j in range(1,line_count+1):   
-    
-        if str("\'" +"l"+str(j)+"\'") in str(data[i]).lower():
-            
-    
-            if data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "EAVE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RAKE" or data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] == "RIDGE":
-                
-                   line = data[i]["POLYGON"]["@path"]["L"+str(j)]
-                   print("xyz wind zone coordinates for F" + str(i) + " Type " +  str(data[i]["POLYGON"]["@path"]["L"+str(j)]["Type"] ))
-                   print(new_coordinates_in_line(line,a,length(line)))
-                   
-                   
-                   
-
-"""
 
 
